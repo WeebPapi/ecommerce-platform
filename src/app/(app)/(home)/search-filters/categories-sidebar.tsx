@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { CustomCategory } from "../types"
+
 import {
   Sheet,
   SheetContent,
@@ -9,20 +9,23 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChevronLeftIcon, ChevronRight, ChevronRightIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
+import {
+  CategoriesGetManyOutput,
+  CategoriesGetManyOutputSingle,
+} from "@/modules/categories/types"
 
 interface Props {
   open: boolean
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-  data: CustomCategory[]
+  data: CategoriesGetManyOutput
 }
 
 const CategoriesSidebar: React.FC<Props> = ({ open, onOpenChange, data }) => {
   const router = useRouter()
-  const [parentCategories, setParentCategories] = useState<
-    CustomCategory[] | null
-  >(null)
+  const [parentCategories, setParentCategories] =
+    useState<CategoriesGetManyOutput | null>(null)
   const [selectedCategory, setSelectedCategory] =
-    useState<CustomCategory | null>(null)
+    useState<CategoriesGetManyOutputSingle | null>(null)
   const currentCategories = parentCategories ?? data ?? []
   const handleOpenChange = (open: boolean) => {
     setSelectedCategory(null)
@@ -30,9 +33,9 @@ const CategoriesSidebar: React.FC<Props> = ({ open, onOpenChange, data }) => {
     onOpenChange(open)
   }
 
-  const handleCategoryClick = (category: CustomCategory) => {
+  const handleCategoryClick = (category: CategoriesGetManyOutputSingle) => {
     if (category.subcategories && category.subcategories.length > 0) {
-      setParentCategories(category.subcategories as CustomCategory[])
+      setParentCategories(category.subcategories as CategoriesGetManyOutput)
       setSelectedCategory(category)
     } else {
       if (parentCategories && selectedCategory) {
